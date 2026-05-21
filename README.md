@@ -1,4 +1,4 @@
-# 🍔 Point Delivery
+# 🍔 Point Burguer
 
 Cardápio digital com envio de pedidos via WhatsApp para duas hamburguerias de um mesmo grupo.
 
