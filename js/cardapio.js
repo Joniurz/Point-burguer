@@ -13,7 +13,7 @@ const RESTAURANTES = {
     whatsapp: '558287660172', // ← Troque pelo número real
 
     redes: {
-      instagram: 'https://www.instagram.com/pointburguer1',
+      instagram: 'https://www.instagram.com',
       whatsappcontato: '998877665544',
     },
 
@@ -125,7 +125,7 @@ const RESTAURANTES = {
     whatsapp: '558296890363', // ← Troque pelo número real
 
     redes: {
-      instagram: 'https://www.instagram.com/pointnabrasa1',
+      instagram: 'https://www.instagram.com',
       whatsappcontato: '998877665544',
     },
 
