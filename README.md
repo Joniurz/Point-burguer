@@ -76,8 +76,10 @@ Sem backend. Sem banco de dados. Sem dependências para instalar.
 ## Estrutura do projeto
 
 ```
-point-delivery/
+point-burguer/
 ├── index.html          # Estrutura completa da interface
+├── assets/
+│   └── favicon.png     # Favicon
 ├── css/
 │   └── estilo.css      # Todo o visual
 └── js/
