@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0e0c0a" />
+  <title>Point Burguer</title>
+  <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+<!-- TELA 1: ESCOLHA DA HAMBURGUERIA  -->
+<div id="tela-escolha">
+
+  <div class="logo-principal">Point<span>Burguer</span></div>
+  <p class="label-escolha">Selecione a hamburgueria</p>
+
+  <div class="grid-escolha">
+
+    <!-- Point Burguer -->
+    <div class="card-restaurante burguer" onclick="selecionarRestaurante('point_burguer')">
+      <div class="emoji-rest">🍔</div>
+      <div class="info-rest">
+        <h2>Point Burguer</h2>
+        <p>Hambúrgueres & Pastéis Artesanais</p>
+      </div>
+    </div>
+
+    <!-- Point na Brasa -->
+    <div class="card-restaurante brasa" onclick="selecionarRestaurante('point_brasa')">
+      <div class="emoji-rest">🔥</div>
+      <div class="info-rest">
+        <h2>Point na Brasa</h2>
+        <p>Hambúrgueres Grelhados no Carvão</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TELA 2: CARDÁPIO -->
+<div id="tela-cardapio" style="display:none;">
+
+  <header>
+    <div class="header-esq">
+      <button class="btn-voltar" onclick="voltarEscolha()" title="Voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div>
+        <span id="header-emoji">🍔</span>
+        <span class="nome-header" id="nome-restaurante"></span>
+      </div>
+    </div>
+
+    <div class="header-dir">
+      <span id="badge-horario" class="badge-horario"></span>
+      <button class="btn-carrinho" id="btn-carrinho" onclick="abrirCarrinho()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Carrinho
+      <span class="badge-qtd" id="btn-carrinho-qtd">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de pesquisa -->
+  <div id="barra-pesquisa">
+    <span class="lupa">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </span>
+    <input
+      type="search"
+      id="input-pesquisa"
+      placeholder="Buscar lanche..."
+      oninput="filtrarProdutos(this.value)"
+      autocomplete="off"
+    />
+  </div>
+
+  <!-- Últimos pedidos -->
+  <div id="ultimos-pedidos"></div>
+
+  <!-- Produtos (preenchido pelo JS) -->
+  <div id="cardapio-container"></div>
+
+  <!-- Rodapé do cardápio -->
+  <footer class="rodape-cardapio" id="rodape-cardapio">
+
+    <div class="rodape-horario" id="rodape-horario-texto"></div>
+
+    <div class="rodape-redes">
+      <a id="rodape-wpp"       href="#" target="_blank" rel="noopener" class="rodape-link rodape-wpp"       title="WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+      <a id="rodape-instagram" href="#" target="_blank" rel="noopener" class="rodape-link rodape-instagram" title="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+    </div>
+
+    <div class="rodape-dev">
+      Desenvolvido por
+      <a href="https://instagram.com/jraugustto" target="_blank" rel="noopener">
+        Augusto Júnior
+      </a>
+    </div>
+
+  </footer>
+
+</div>
+
+<!--  OVERLAY (fundo escuro do drawer) -->
+<div class="overlay" id="overlay" onclick="fecharTudo()"></div>
+
+<!-- MODAL DE ADICIONAIS Aparece ao clicar no carrinho, antes do drawer -->
+<div class="modal-adicionais" id="modal-adicionais">
+  <div class="modal-conteudo">
+    <p class="modal-titulo" id="modal-titulo">Quer adicionar algo? 🧀</p>
+    <p class="modal-subtitulo" id="modal-subtitulo">Opcional — válido para hambúrgueres e pastéis</p>
+ 
+    <!-- MODO ADICIONAIS -->
+    <div id="modal-modo-adicionais">
+      <div class="modal-lista" id="modal-lista-adicionais"></div>
+      <div class="modal-acoes">
+        <button class="btn-pular" onclick="pularAdicionais()">Pular</button>
+        <button class="btn-confirmar-adicionais" onclick="confirmarAdicionais()">
+          Adicionar ao pedido
+        </button>
+      </div>
+    </div>
+ 
+    <!-- MODO OBSERVAÇÃO -->
+    <div id="modal-modo-obs" style="display:none;">
+      <textarea
+        class="input-obs"
+        id="obs-input"
+        rows="4"
+        maxlength="200"
+        oninput="atualizarContadorObs()"
+        placeholder="Ex: sem cebola, ponto da carne bem passado, sem molho..."
+      ></textarea>
+      <p class="obs-contador"><span id="obs-count">0</span>/200</p>
+      <div class="modal-acoes">
+        <button class="btn-pular" onclick="pularObs()">Cancelar</button>
+        <button class="btn-confirmar-adicionais" onclick="confirmarObs()">
+          Salvar observação
+        </button>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+
+<!-- DRAWER DO CARRINHO -->
+<div class="drawer" id="drawer">
+
+  <!-- Alça visual -->
+  <div class="drawer-alca"></div>
+
+  <!-- Título -->
+  <div class="drawer-header">
+    <span class="drawer-titulo">🛒 Seu Pedido</span>
+    <button class="btn-fechar-drawer" onclick="fecharCarrinho()">✕</button>
+  </div>
+
+  <!-- Lista de itens -->
+  <div class="drawer-corpo" id="carrinho-itens">
+    <div class="carrinho-vazio">
+      <span>🛒</span>
+      <p>Seu carrinho está vazio</p>
+      <small>Adicione itens do cardápio</small>
+    </div>
+  </div>
+
+  <!-- Endereço -->
+  <div class="secao-endereco">
+    <label class="label-campo" for="endereco-input">📍 Endereço de entrega</label>
+    <textarea
+      class="input-endereco"
+      id="endereco-input"
+      rows="2"
+      placeholder="Rua, número, bairro..."
+    ></textarea>
+    <div id="enderecos-recentes"></div>
+  </div>
+
+  <!-- Forma de pagamento -->
+  <div class="secao-pagamento">
+    <span class="label-campo">💳 Forma de pagamento</span>
+    <div class="opcoes-pagamento">
+      <button class="btn-pagamento" data-pagamento="dinheiro" onclick="selecionarPagamento('dinheiro')">
+        <span class="icone-pag">💵</span>
+        Dinheiro
+      </button>
+      <button class="btn-pagamento" data-pagamento="pix" onclick="selecionarPagamento('pix')">
+        <span class="icone-pag icone-pix">
+          <i class="fa-brands fa-pix"></i>
+        </span>
+        Pix
+      </button>
+      <button class="btn-pagamento" data-pagamento="cartao" onclick="selecionarPagamento('cartao')">
+        <span class="icone-pag">💳</span>
+        Cartão
+      </button>
+    </div>
+
+    <!-- Campo troco (só aparece se for Dinheiro) -->
+    <div id="campo-troco">
+      <input
+        class="input-troco"
+        id="troco-input"
+        type="number"
+        placeholder="Troco para quanto? Ex: 50"
+        min="0"
+        step="0.01"
+      />
+    </div>
+  </div>
+
+  <!-- Total + Botão enviar -->
+  <div class="drawer-rodape">
+    <div class="linha-total">
+      <span class="label-total">Total do pedido</span>
+      <span class="valor-total" id="total-valor">R$ 0,00</span>
+    </div>
+    <button class="btn-enviar" id="btn-enviar" onclick="enviarPedido()">
+      ENVIAR PELO WHATSAPP
+    </button>
+  </div>
+
+</div>
+
+<!-- Toast de alertas -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts (ordem importa!) -->
+<script src="js/cardapio.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

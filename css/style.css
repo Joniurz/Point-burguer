@@ -1,0 +1,1092 @@
+/* ── RESET & VARIÁVEIS ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0e0c0a;
+  --surface:     #181410;
+  --card:        #211d19;
+  --borda:       #2e2a25;
+  --texto:       #e8dfcd;
+  --mudo:        #887f74;
+  --verde:       #5fa52d;
+  --cor-ativa:   #efc21e;
+  --cor-ativa-escura: #d8a900;
+  --raio:        12px;
+  --raio-lg:     20px;
+}
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── TELA DE ESCOLHA ───────────────────────────────────────────────────── */
+#tela-escolha {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.logo-principal {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  letter-spacing: 3px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.logo-principal span { color: var(--cor-ativa); }
+
+.subtitulo-escolha {
+  color: var(--mudo);
+  font-size: 14px;
+  margin-bottom: 40px;
+  letter-spacing: 0.5px;
+}
+
+.label-escolha {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mudo);
+  margin-bottom: 16px;
+}
+
+.grid-escolha {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.card-restaurante {
+  background: var(--card);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio-lg);
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-restaurante:active { transform: scale(0.97); }
+
+.card-restaurante .emoji-rest { font-size: 44px; flex-shrink: 0; }
+
+.card-restaurante .info-rest h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.card-restaurante .info-rest p {
+  font-size: 13px;
+  color: var(--mudo);
+}
+
+.card-restaurante.burguer:hover,
+.card-restaurante.burguer:active {
+  border-color: #efc21e;
+  background: rgba(232,160,18,0.08);
+}
+
+.card-restaurante.brasa:hover,
+.card-restaurante.brasa:active {
+  border-color: #e35702;
+  background: rgba(217,79,26,0.08);
+}
+
+.header-dir {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Badge de horário */
+.badge-horario {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.badge-horario.aberto {
+  background: rgba(34,197,94,0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.25);
+}
+
+.badge-horario.fechado {
+  background: rgba(239,68,68,0.10);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.22);
+  /* Em telas pequenas o texto pode ficar longo — permite quebrar */
+  white-space: normal;
+  text-align: right;
+  max-width: 180px;
+  line-height: 1.4;
+}
+
+/* Botão enviar desabilitado quando fechado */
+.btn-enviar:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(40%);
+}
+
+/* ── HEADER DO CARDÁPIO ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--borda);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-esq {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-voltar {
+  background: var(--card);
+  border: 1px solid var(--borda);
+  color: var(--texto);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-voltar:active { background: var(--borda); }
+
+.nome-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.btn-carrinho {
+  background: var(--cor-ativa);
+  color: #000;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-carrinho:active { transform: scale(0.95); }
+
+.badge-qtd {
+  background: #000;
+  color: var(--cor-ativa);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* ── CARDÁPIO ── */
+#cardapio-container {
+  padding: 0 16px 120px;
+}
+
+.categoria {
+  padding-top: 24px;
+}
+
+.titulo-categoria {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  color: var(--mudo);
+  margin-bottom: 12px;
+}
+
+.grade-produtos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-produto {
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.produto-info { flex: 1; }
+
+.produto-info strong {
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.produto-info p {
+  font-size: 12px;
+  color: var(--mudo);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.preco {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cor-ativa);
+}
+
+.controle-qtd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-qtd {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--borda);
+  background: transparent;
+  color: var(--texto);
+  font-size: 32px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-qtd:active { background: var(--borda); }
+
+.valor-qtd {
+  font-weight: 800;
+  font-size: 16px;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* ── OVERLAY & DRAWER ──────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.overlay.aberto { opacity: 1; pointer-events: all; }
+
+.drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  z-index: 300;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(.32,1.2,.5,1);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.aberto { transform: translateY(0); }
+
+.drawer-alca {
+  width: 40px;
+  height: 4px;
+  background: var(--borda);
+  border-radius: 2px;
+  margin: 12px auto 6px;
+  flex-shrink: 0;
+}
+
+.drawer-header {
+  padding: 6px 16px 14px;
+  border-bottom: 1px solid var(--borda);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.drawer-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+
+.btn-fechar-drawer {
+  background: var(--card);
+  border: none;
+  color: var(--mudo);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Itens do carrinho */
+.drawer-corpo {
+  overflow-y: auto;
+  flex: 1;
+  padding: 14px 16px;
+}
+
+.carrinho-vazio {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mudo);
+}
+
+.carrinho-vazio span { font-size: 48px; display: block; margin-bottom: 10px; }
+
+.item-carrinho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--borda);
+  gap: 10px;
+}
+
+.item-info { flex: 1; }
+.item-info strong { font-size: 14px; display: block; }
+.item-info span { font-size: 13px; color: var(--mudo); }
+
+.item-qtd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-qtd span { font-weight: 700; min-width: 20px; text-align: center; }
+
+/* ── SEÇÃO DE ENDEREÇO ─────────────────────────────────────────────────── */
+.secao-endereco {
+  padding: 14px 16px;
+  border-top: 1px solid var(--borda);
+  flex-shrink: 0;
+}
+
+.label-campo {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--mudo);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-endereco {
+  width: 100%;
+  background: var(--card);
+  border: 1.5px solid var(--borda);
+  border-radius: 10px;
+  padding: 11px 13px;
+  color: var(--texto);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.input-endereco:focus { border-color: var(--cor-ativa); }
+
+.label-recente {
+  font-size: 11px;
+  color: var(--mudo);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin: 10px 0 6px;
+}
+
+.btn-endereco-recente {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--mudo);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-endereco-recente:hover { border-color: var(--cor-ativa); color: var(--texto); }
+
+/* ── PAGAMENTO ─────────────────────────────────────────────────────────── */
+.secao-pagamento {
+  padding: 12px 16px 0;
+  flex-shrink: 0;
+}
+
+.opcoes-pagamento {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-pagamento {
+  flex: 1;
+  padding: 10px 6px;
+  border-radius: 10px;
+  border: 1.5px solid var(--borda);
+  background: var(--card);
+  color: var(--mudo);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-pagamento .icone-pag { display: block; font-size: 20px; margin-bottom: 3px; }
+
+.icone-pix {
+  color: #00bdae;
+}
+
+.btn-pagamento.ativo {
+  border-color: var(--cor-ativa);
+  background: rgba(var(--r,232),var(--g,160),var(--b,18),0.12);
+  color: var(--cor-ativa);
+}
+
+#campo-troco { display: none; margin-top: 8px; }
+
+.input-troco {
+  width: 100%;
+  background: var(--card);
+  border: 1.5px solid var(--borda);
+  border-radius: 10px;
+  padding: 10px 13px;
+  color: var(--texto);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-troco:focus { border-color: var(--cor-ativa); }
+
+/* ── RODAPÉ DO DRAWER ──────────────────────────────────────────────────── */
+.drawer-rodape {
+  padding: 14px 16px;
+  border-top: 1px solid var(--borda);
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+.linha-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.label-total {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--mudo);
+}
+
+.valor-total {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  color: var(--verde);
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--raio);
+  border: none;
+  background: var(--cor-ativa);
+  color: #000;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.btn-enviar:active { transform: scale(0.97); }
+.btn-enviar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── TOAST ─────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 110px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: #1a1714;
+  border: 1px solid var(--borda);
+  color: var(--texto);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 500;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast.visivel {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── RODAPÉ — TELA DE ESCOLHA ──────────────────────────────────────────── */
+.rodape-escolha {
+  margin-top: auto;       /* empurra para o fundo sem tirar o center dos outros */
+  padding: 20px 16px;
+  font-size: 12px;
+  color: var(--mudo);
+  text-align: center;
+}
+
+.rodape-escolha a {
+  color: var(--mudo);
+  text-decoration: none;
+  border-bottom: 1px solid var(--borda);
+  transition: color 0.15s;
+}
+
+.rodape-escolha a:hover { color: var(--texto); }
+
+.rodape-escolha i { margin-right: 3px; }
+
+/* ── RODAPÉ — TELA DO CARDÁPIO ─────────────────────────────────────────── */
+.rodape-cardapio {
+  border-top: 1px solid var(--borda);
+  margin-top: 8px;
+  padding: 20px 20px 48px;   /* 48px embaixo para não colar no fundo do celular */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Linha de horário */
+.rodape-horario {
+  font-size: 12px;
+  color: var(--mudo);
+  letter-spacing: 0.3px;
+}
+
+/* Ícones das redes sociais */
+.rodape-redes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.rodape-link {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--borda);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--mudo);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.rodape-link:active { opacity: 0.75; }
+
+/* Cores individuais ao hover */
+.rodape-wpp:hover {
+  border-color: #25d366;
+  color: #25d366;
+  background: rgba(37,211,102,0.08);
+}
+
+.rodape-instagram:hover {
+  border-color: #e1306c;
+  color: #e1306c;
+  background: rgba(225,48,108,0.08);
+}
+
+/* Crédito do desenvolvedor */
+.rodape-dev {
+  font-size: 11px;
+  color: var(--mudo);
+}
+
+.rodape-dev a {
+  color: var(--mudo);
+  text-decoration: none;
+  border-bottom: 1px solid var(--borda);
+  transition: color 0.15s;
+}
+
+.rodape-dev a:hover { color: var(--texto); }
+.rodape-dev i { margin-right: 3px; }
+
+/* ── OBSERVAÇÃO NO MODAL ───────────────────────────────────────────────── */
+.input-obs {
+  width: 100%;
+  background: var(--card);
+  border: 1.5px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  color: var(--texto);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 4px;
+}
+ 
+.input-obs:focus { border-color: var(--cor-ativa); }
+ 
+.input-obs::placeholder { color: var(--mudo); }
+ 
+.obs-contador {
+  font-size: 11px;
+  color: var(--mudo);
+  text-align: right;
+  margin-bottom: 16px;
+}
+ 
+/* Observação exibida no item do carrinho */
+.obs-do-item {
+  font-size: 12px;
+  color: var(--mudo);
+  font-style: italic;
+  margin: 4px 0 4px;
+  line-height: 1.4;
+}
+ 
+/* Botões de adicionais e obs lado a lado */
+.btns-produto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* ── BOTÃO DE ADICIONAIS NO CARD DO PRODUTO ────────────────────────────── */
+.btn-adicional-produto {
+  display: none; /* visível só quando qtd > 0, via JS */
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--borda);
+  background: transparent;
+  color: var(--mudo);
+  font-family: 'Barlow', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-adicional-produto:hover {
+  border-color: var(--cor-ativa);
+  color: var(--cor-ativa);
+}
+
+/* Quando já tem adicionais selecionados */
+.btn-adicional-produto.tem-adicionais {
+  border-color: var(--cor-ativa);
+  color: var(--cor-ativa);
+  background: rgba(232,160,18,0.08);
+}
+
+/* ── MODAL DE ADICIONAIS ───────────────────────────────────────────────── */
+.modal-adicionais {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 310;                         /* acima do overlay (200) e drawer (300) */
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(.32,1.2,.5,1);
+}
+
+.modal-adicionais.aberto { transform: translateY(0); }
+
+.modal-conteudo {
+  background: var(--surface);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  padding: 24px 20px 32px;
+  border-top: 1px solid var(--borda);
+}
+
+.modal-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.modal-subtitulo {
+  font-size: 12px;
+  color: var(--mudo);
+  margin-bottom: 20px;
+}
+
+/* Lista de checkboxes */
+.modal-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.adicional-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1.5px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 13px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.adicional-item:has(.adicional-check:checked) {
+  border-color: var(--cor-ativa);
+  background: rgba(232,160,18,0.07);
+}
+
+.adicional-check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--cor-ativa);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.adicional-nome {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.adicional-preco {
+  font-size: 13px;
+  color: var(--cor-ativa);
+  font-weight: 700;
+}
+
+/* Botões de ação do modal */
+.modal-acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-pular {
+  flex: 1;
+  padding: 14px;
+  border-radius: var(--raio);
+  border: 1.5px solid var(--borda);
+  background: transparent;
+  color: var(--mudo);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-pular:hover { border-color: var(--texto); color: var(--texto); }
+
+.btn-confirmar-adicionais {
+  flex: 2;
+  padding: 14px;
+  border-radius: var(--raio);
+  border: none;
+  background: var(--cor-ativa);
+  color: #000;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-confirmar-adicionais:active { opacity: 0.85; }
+
+/* ── ADICIONAIS NO CARRINHO ────────────────────────────────────────────── */
+.adicionais-do-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 5px 0 4px;
+}
+
+.adicional-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cor-ativa);
+  background: rgba(232,160,18,0.1);
+  border: 1px solid rgba(232,160,18,0.25);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+/* Centraliza o modal em telas maiores (igual ao drawer) */
+@media (min-width: 700px) {
+  .modal-adicionais { max-width: 480px; left: 50%; transform: translate(-50%, 100%); }
+  .modal-adicionais.aberto { transform: translate(-50%, 0); }
+}
+
+@media (min-width: 768px) {
+  .modal-adicionais { max-width: 680px; }
+}
+
+@media (min-width: 1100px) {
+  .modal-adicionais { max-width: 720px; }
+}
+
+/* ── RESPONSIVO ────────────────────────────────────────────────────────── */
+@media (min-width: 480px) {
+  .grade-produtos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 700px) {
+  body { max-width: 480px; margin: 0 auto; }
+  .drawer { max-width: 480px; left: 50%; transform: translate(-50%, 100%); }
+  .drawer.aberto { transform: translate(-50%, 0); }
+}
+
+/* ── MELHORIA 1: BARRA DE PESQUISA ────────────────────────────────────── */
+#barra-pesquisa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px 0;
+}
+
+.lupa {
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+#input-pesquisa {
+  flex: 1;
+  background: var(--card);
+  border: 1.5px solid var(--borda);
+  border-radius: 999px;
+  padding: 9px 16px;
+  color: var(--texto);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  /* Remove o X padrão do tipo search em alguns browsers */
+  -webkit-appearance: none;
+}
+
+#input-pesquisa::placeholder { color: var(--mudo); }
+#input-pesquisa:focus { border-color: var(--cor-ativa); }
+
+.aviso-sem-resultado {
+  text-align: center;
+  color: var(--mudo);
+  font-size: 14px;
+  padding: 32px 20px;
+}
+
+/* Classe utilitária usada pela pesquisa para esconder cards e categorias */
+.oculto { display: none !important; }
+
+/* ── MELHORIA 2: ÚLTIMOS PEDIDOS ───────────────────────────────────────── */
+.ultimos-pedidos-wrap {
+  padding: 14px 16px 0;
+}
+
+.label-ultimos {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--mudo);
+  margin-bottom: 8px;
+}
+
+.btn-ultimo-pedido {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  text-align: left;
+}
+
+.btn-ultimo-pedido:hover { border-color: var(--cor-ativa); }
+.btn-ultimo-pedido:active { opacity: 0.8; }
+
+.ultimo-emoji { font-size: 22px; flex-shrink: 0; }
+
+.ultimo-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.ultimo-info strong {
+  display: block;
+  font-size: 13px;
+  color: var(--texto);
+  font-family: 'Barlow', sans-serif;
+}
+
+.ultimo-info small {
+  font-size: 12px;
+  color: var(--mudo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.ultimo-repetir {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cor-ativa);
+  flex-shrink: 0;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* ── RESPONSIVIDADE AMPLIADA ───────────────────────────────── */
+
+/* Tablet: 768px+ — 2 colunas nos cards da escolha, layout mais arejado */
+@media (min-width: 768px) {
+  #tela-escolha { padding: 48px 32px; }
+
+  .grid-escolha {
+    flex-direction: row;
+    max-width: 600px;
+    gap: 20px;
+  }
+
+  .card-restaurante { flex-direction: column; text-align: center; padding: 32px 24px; }
+  .card-restaurante .emoji-rest { font-size: 56px; }
+  .card-restaurante .info-rest h2 { font-size: 26px; }
+
+  body { max-width: 680px; margin: 0 auto; }
+
+  .drawer { max-width: 680px; left: 50%; transform: translate(-50%, 100%); }
+  .drawer.aberto { transform: translate(-50%, 0); }
+
+  #barra-pesquisa { padding: 16px 20px 0; }
+  #cardapio-container { padding: 0 20px 140px; }
+
+  .logo-principal { font-size: 68px; }
+}
+
+/* Desktop: 1100px+ — centraliza tudo, limita largura para leitura confortável */
+@media (min-width: 1100px) {
+  body { max-width: 720px; }
+
+  .drawer { max-width: 720px; }
+
+  .grade-produtos { grid-template-columns: repeat(3, 1fr); }
+
+  header { padding: 16px 24px; }
+
+  #cardapio-container { padding: 0 24px 140px; }
+  #barra-pesquisa { padding: 20px 24px 0; }
+  .ultimos-pedidos-wrap { padding: 16px 24px 0; }
+}
